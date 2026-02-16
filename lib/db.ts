@@ -1,4 +1,3 @@
-import { g } from "framer-motion/client";
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI;
