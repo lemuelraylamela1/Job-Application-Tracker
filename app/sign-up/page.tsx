@@ -9,11 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { signUp } from "@/lib/auth/auth-client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
-import { signUp } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {
@@ -28,8 +28,9 @@ export default function SignUp() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
+
     setError("");
+    setLoading(true);
 
     try {
       const result = await signUp.email({
@@ -37,10 +38,11 @@ export default function SignUp() {
         email,
         password,
       });
+
       if (result.error) {
-        setError(result.error.message || "Failed to sign up");
+        setError(result.error.message ?? "Failed to sign up");
       } else {
-        router.push("/sign-in");
+        router.push("/dashboard");
       }
     } catch (err) {
       setError("An unexpected error occurred");
@@ -63,8 +65,8 @@ export default function SignUp() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <CardContent className="space-y-4">
             {error && (
-              <div className="rounded-md bg-red-50 p-4">
-                <p className="text-sm text-red-700">{error}</p>
+              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+                {error}
               </div>
             )}
             <div className="space-y-2">
@@ -113,9 +115,9 @@ export default function SignUp() {
           <CardFooter className="flex flex-col space-y-4">
             <Button
               type="submit"
-              disabled={loading}
-              className="w-full bg-primary hover:bg-primary/90">
-              {loading ? "Signing Up..." : "Sign Up"}
+              className="w-full bg-primary hover:bg-primary/90"
+              disabled={loading}>
+              {loading ? "Creating account..." : "Sign Up"}
             </Button>
             <p className="text-center text-sm text-gray-600">
               Already have an account?

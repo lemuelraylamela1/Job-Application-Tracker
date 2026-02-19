@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/auth/auth-client";
 
 export default function SignIn() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
