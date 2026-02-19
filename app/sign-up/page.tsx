@@ -13,8 +13,9 @@ import { signUp } from "@/lib/auth/auth-client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "@/lib/auth/auth-client";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -25,6 +26,14 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setError("");
+    setLoading(false);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -42,9 +51,13 @@ export default function SignUp() {
       if (result.error) {
         setError(result.error.message ?? "Failed to sign up");
       } else {
-        router.push("/dashboard");
+        // 🔒 Kill the auto-created session
+        await signOut();
+
+        // ➡️ Force manual login
+        router.push("/sign-in");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -120,7 +133,7 @@ export default function SignUp() {
               {loading ? "Creating account..." : "Sign Up"}
             </Button>
             <p className="text-center text-sm text-gray-600">
-              Already have an account?
+              Already have an account?{" "}
               <Link
                 href="/sign-in"
                 className="font-medium text-primary hover:underline">

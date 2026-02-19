@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signIn, signUp } from "@/lib/auth/auth-client";
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "@/lib/auth/auth-client";
+import { useState } from "react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -27,16 +27,18 @@ export default function SignIn() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
+
     setError("");
+    setLoading(true);
 
     try {
       const result = await signIn.email({
         email,
         password,
       });
+
       if (result.error) {
-        setError(result.error.message || "Failed to sign in");
+        setError(result.error.message ?? "Failed to sign in");
       } else {
         router.push("/dashboard");
       }
@@ -46,6 +48,7 @@ export default function SignIn() {
       setLoading(false);
     }
   }
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white p-4">
       <Card className="w-full max-w-md border-gray-200 shadow-lg">
@@ -54,16 +57,16 @@ export default function SignIn() {
             Sign In
           </CardTitle>
           <CardDescription className="text-gray-600">
-            Enter your email and password to access your job application tracker
+            Enter your credentials to access your account
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          )}
           <CardContent className="space-y-4">
+            {error && (
+              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-gray-700">
                 Email
@@ -71,9 +74,9 @@ export default function SignIn() {
               <Input
                 id="email"
                 type="email"
-                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
                 required
                 className="border-gray-300 focus:border-primary focus:ring-primary"
               />
@@ -85,9 +88,9 @@ export default function SignIn() {
               <Input
                 id="password"
                 type="password"
+                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
                 minLength={8}
                 className="border-gray-300 focus:border-primary focus:ring-primary"
               />
@@ -98,10 +101,10 @@ export default function SignIn() {
               type="submit"
               className="w-full bg-primary hover:bg-primary/90"
               disabled={loading}>
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ? "Signing in..." : "Sign In"}
             </Button>
             <p className="text-center text-sm text-gray-600">
-              Don&apos;t have an account?
+              Don't have an account?{" "}
               <Link
                 href="/sign-up"
                 className="font-medium text-primary hover:underline">

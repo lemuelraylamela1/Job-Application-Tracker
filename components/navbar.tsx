@@ -3,14 +3,16 @@
 import { Briefcase } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { getSession, signOut } from "@/lib/auth/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "./ui/avatar";
-import SignOutBtn from "./sign-out-btn";
+import SignOutButton from "./sign-out-btn";
 import { useSession } from "@/lib/auth/auth-client";
 
 export default function Navbar() {
@@ -58,8 +60,7 @@ export default function Navbar() {
                       </p>
                     </div>
                   </DropdownMenuLabel>
-
-                  <SignOutBtn />
+                  <SignOutButton />
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
@@ -69,13 +70,13 @@ export default function Navbar() {
                 <Button
                   variant="ghost"
                   className="text-gray-700 hover:text-black">
-                  Log in
+                  Log In
                 </Button>
               </Link>
-              <Link
-                href="/sign-up"
-                className="text-primary hover:text-primary/90">
-                <Button>Start for free</Button>
+              <Link href="/sign-up">
+                <Button className="bg-primary hover:bg-primary/90">
+                  Start for free
+                </Button>
               </Link>
             </>
           )}
