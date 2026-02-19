@@ -1,7 +1,5 @@
-import { i } from "framer-motion/client";
 import connectDB from "./db";
 import { Board, Column } from "./models";
-import jobApplication from "./models/job-application";
 
 const DEFAULT_COLUMNS = [
   { name: "Wish List", order: 0 },
